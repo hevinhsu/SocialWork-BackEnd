@@ -8,11 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Wayne's Talk API", version = "v1.0.0",
+                title = "Test API", version = "version:test",
                 description = "Testing OpenApi On SpringDoc",
-                license = @License(name = "MIT Licence")
-
-
+                license = @License(name = "Apache Licence")
                 ))
 @Configuration
 public class OpenApiConfig {

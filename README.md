@@ -9,10 +9,17 @@
 # 預計使用技術:
 ### 前端:
 * Vue
+* Vue Cli
+* Bootstrap3/4
 ### 後端:
 * Spring boot
 * Spring Data
 
-### 其他
-* swag
+### 其他:
+* swagger
+* Springdoc
 * docker
+* gradle
+
+### DB:
+* MySQL or PostgreSQL
