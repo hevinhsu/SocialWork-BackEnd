@@ -1,9 +1,9 @@
 # DataSource配置
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/social_work?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/social_work?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=false
     username: root
-    password: ****
+    password: tmps880445
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -11,3 +11,5 @@ spring:
       ddl-auto: create
       jdbc:
         time_zone: GMT+8
+
+

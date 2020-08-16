@@ -23,7 +23,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	compile "org.springframework.boot:spring-boot-devtools"
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
@@ -36,7 +36,17 @@ dependencies {
 	// this is for mysql java connector
 	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
 	runtime "mysql:mysql-connector-java:8.0.15"
+
+	//swagger
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
+
+	//open API
+	implementation("org.springdoc:springdoc-openapi-ui:1.4.3")
+	implementation("org.springdoc:springdoc-openapi-kotlin:1.4.3")
+
 }
+
+
 
 test {
 	useJUnitPlatform()
