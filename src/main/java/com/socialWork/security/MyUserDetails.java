@@ -4,12 +4,16 @@ import com.socialWork.user.pojo.Role;
 import com.socialWork.user.pojo.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-public class MyUserDetail implements UserDetails {
+public class MyUserDetails implements UserDetails {
     private User user;
+
 
     public MyUserDetails(User user) {
         this.user = user;
@@ -20,8 +24,8 @@ public class MyUserDetail implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         if (roles.size()>=1){
-            for (  Role role : roles){
-                authorities.add(new SimpleGrantedAuthority(role.getName()));
+            for (Role role : roles){
+                authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
             }
             return authorities;
         }
@@ -30,31 +34,31 @@ public class MyUserDetail implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return user.getUsername();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
