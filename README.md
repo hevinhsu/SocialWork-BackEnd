@@ -23,3 +23,9 @@
 
 ### DB:
 * MySQL or PostgreSQL
+
+
+# 參考資料
+* [Springdoc](https://waynestalk.com/springdoc-openapi-tutorial/)
+* [Spring Security 概念](https://waynestalk.com/spring-security-architecture-explained/)
+* [Spring Security](https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/300662/)

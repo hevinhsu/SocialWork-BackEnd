@@ -43,6 +43,12 @@ dependencies {
 	//open API
 	implementation("org.springdoc:springdoc-openapi-ui:1.4.3")
 
+	//spring security & jwt
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt-api:0.10.7',
+			'io.jsonwebtoken:jjwt-impl:0.10.7',
+			'io.jsonwebtoken:jjwt-jackson:0.10.7'
+
 }
 
 

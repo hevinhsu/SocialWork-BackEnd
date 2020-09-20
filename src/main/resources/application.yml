@@ -12,4 +12,3 @@ spring:
       jdbc:
         time_zone: GMT+8
 
-
