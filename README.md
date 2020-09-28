@@ -22,7 +22,8 @@
 * gradle
 
 ### DB:
-* MySQL or PostgreSQL
+* MySQL or PostgreSQL(目前使用Mysql)
+
 
 
 # 參考資料
