@@ -46,11 +46,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
         //允許所有使用者訪問首頁 與 登入
                 .antMatchers("/").permitAll()
+                .antMatchers("/auth/login").permitAll()
 
         //使用者頁面需要使用者許可權
                 .antMatchers("/test").hasAnyRole("USER")
                         //其它任何請求都要經過認證通過
-                        .anyRequest().authenticated()
+//                        .anyRequest().authenticated()
                 .and()
         //設定登出
                 .logout().permitAll();
@@ -66,4 +67,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public GenericFilterBean genericFilterBean() {
         return new JwtAuthenticationTokenFilter();
     }
+
 }

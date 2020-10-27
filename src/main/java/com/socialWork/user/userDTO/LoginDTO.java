@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-public class userDTO {
+
     @Data
     public class LoginDTO implements Serializable {
         @NotBlank(message = "使用者名稱不能為空")
@@ -14,4 +14,3 @@ public class userDTO {
         private String password;
     }
 
-}
