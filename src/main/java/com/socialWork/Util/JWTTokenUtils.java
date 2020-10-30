@@ -1,30 +1,36 @@
 package com.socialWork.Util;
 
-import com.socialWork.user.pojo.User;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.impl.crypto.MacProvider;
-import lombok.extern.slf4j.Slf4j;
+import java.security.Key;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
-import java.security.SignatureException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.stream.Collectors;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.impl.crypto.MacProvider;
 
-@Slf4j
 @Component
 public class JWTTokenUtils  {
+	private static final Logger log = LoggerFactory.getLogger("JWTTokenUtils.class");
+
+	
     static final long EXPIRATIONTIME = 60 * 60;     // 1h
     static final String AUTHORITIES_KEY = "auth";
     static final String TOKEN_PREFIX = "Bearer";        // Token前缀
     static final String HEADER_STRING = "Authorization";// 存放Token的Header Key
-    static final Key key = MacProvider.generateKey();	//給定一組密鑰，用來解密以及加密使用
+    static final Key key = MacProvider.generateKey();
 
     public String createToken(Authentication authentication){
         String authorities = authentication.getAuthorities().stream()  //獲取使用者的許可權字串，如 USER,ADMIN
@@ -42,14 +48,14 @@ public class JWTTokenUtils  {
     //獲取使用者許可權
     public Authentication getAuthentication(String token){
         try {
-            Claims claims = Jwts.parser()       //解析Token的payload
+            Claims claims = Jwts.parser()
                     .setSigningKey(key)
                     .parseClaimsJws(token)
                     .getBody();
             Collection<? extends GrantedAuthority> authorities =
-                    Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))   //獲取使用者許可權字串
+                    Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                             .map(SimpleGrantedAuthority::new)
-                            .collect(Collectors.toList());             //將元素轉換為GrantedAuthority介面集合
+                            .collect(Collectors.toList());
             String user = claims.getSubject();
             return user != null ? new UsernamePasswordAuthenticationToken(user, "", authorities): null;
 

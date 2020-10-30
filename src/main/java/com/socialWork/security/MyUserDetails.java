@@ -1,18 +1,24 @@
 package com.socialWork.security;
 
-import com.socialWork.user.pojo.Role;
-import com.socialWork.user.pojo.User;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.socialWork.user.pojo.Role;
+import com.socialWork.user.pojo.User;
 
 public class MyUserDetails implements UserDetails {
-    private User user;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -722543852028065676L;
+
+	private User user;
 
 
     public MyUserDetails(User user) {
@@ -22,7 +28,6 @@ public class MyUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<Role> roles = user.getRoles();
         List<GrantedAuthority> authorities = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
         if (roles.size()>=1){
             for (Role role : roles){
                 authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
