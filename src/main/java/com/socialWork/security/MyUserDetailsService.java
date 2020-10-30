@@ -20,8 +20,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
         //從資料庫中載入使用者物件
         Optional<User> user = userRepository.findByUsername(username);
-        //除錯用，如果值存在則輸出下使用者名稱與密碼
-        user.ifPresent((value)->System.out.println("使用者名稱:" + value.getUsername() +  " 使用者密碼：" + value.getPassword()));
         //若值不再則返回null
         return new MyUserDetails(user.orElse(null));
     }

@@ -11,13 +11,16 @@ import java.util.List;
 @Data
 public class Role implements Serializable {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7221779844031532190L;
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long roldId;
+    Long roleId;
     @Column(name = "rolename", nullable = false)
     String roleName;
 
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
-
 }

@@ -11,7 +11,11 @@ import java.util.List;
 @Data
 public class User implements Serializable {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1463768367790619826L;
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long userId;
     @Column(name="username", nullable = false)
@@ -25,12 +29,7 @@ public class User implements Serializable {
     String refreshToken;
 
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "userId")}, inverseJoinColumns = {@JoinColumn(name = "rid", referencedColumnName = "roldId")})
+    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "userId")}, inverseJoinColumns = {@JoinColumn(name = "rid", referencedColumnName = "roleId")})
     private List<Role> roles;
-
-
-
-
-
 
 }
