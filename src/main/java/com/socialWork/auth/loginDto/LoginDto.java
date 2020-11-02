@@ -1,13 +1,15 @@
-package com.socialWork.user.loginDTO;
+package com.socialWork.auth.loginDto;
 
 import java.io.Serializable;
 
 import javax.validation.constraints.NotBlank;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 @Data
-public class LoginDTO implements Serializable {
+@ApiModel(description = "login validate Dto")
+public class LoginDto implements Serializable {
 	/**
 	 * 
 	 */

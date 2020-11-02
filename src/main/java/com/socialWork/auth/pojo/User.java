@@ -1,4 +1,4 @@
-package com.socialWork.user.pojo;
+package com.socialWork.auth.pojo;
 
 import lombok.Data;
 

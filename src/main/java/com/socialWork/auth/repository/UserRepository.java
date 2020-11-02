@@ -1,8 +1,9 @@
-package com.socialWork.user.repository;
+package com.socialWork.auth.repository;
 
-import com.socialWork.user.pojo.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.socialWork.auth.pojo.User;
 
 import java.util.Optional;
 
