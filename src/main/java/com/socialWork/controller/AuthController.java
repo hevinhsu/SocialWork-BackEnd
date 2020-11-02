@@ -14,12 +14,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.socialWork.Util.JWTTokenUtils;
+import com.socialWork.auth.loginDto.LoginDto;
+import com.socialWork.auth.repository.UserRepository;
 import com.socialWork.config.WebSecurityConfig;
-import com.socialWork.user.loginDTO.LoginDTO;
-import com.socialWork.user.repository.UserRepository;
+
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping(value="/auth")
@@ -31,8 +35,9 @@ public class AuthController {
 	@Autowired
 	private JWTTokenUtils jwtTokenUtils;
 	
+	@ApiResponses(value = {@ApiResponse(code = 500, message = "Account not found")})
 	@RequestMapping(value = "/login",method = RequestMethod.POST)
-	public String login(@Valid LoginDTO loginDTO, BindingResult br, HttpServletResponse httpResponse) throws Exception{
+	public String login(@Valid LoginDto loginDTO, BindingResult br, HttpServletResponse httpResponse) throws Exception{
 //	通過使用者名稱和密碼建立一個 Authentication 認證物件，實現類為 UsernamePasswordAuthenticationToken
 	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(),loginDTO.getPassword());
 	if (Objects.nonNull(authenticationToken)){
@@ -50,6 +55,14 @@ public class AuthController {
 		}catch (BadCredentialsException authentication){
 			throw new Exception("密碼錯誤");
 		}
+	}
+	
+	@RequestMapping(value = "/testLogin",method = RequestMethod.POST)
+	public String testLogin(@RequestParam("username") String username,@RequestParam("password")  String password) {
+		System.out.println("username: "+username);
+		System.out.println("password: "+password);
+		
+		return "test success!";
 	}
 
 }

@@ -37,14 +37,15 @@ dependencies {
 
 	// this is for mysql java connector
 	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
-	runtime "mysql:mysql-connector-java:8.0.15"
+	runtime "mysql:mysql-connector-java:8.0.15"	
 
-	//swagger
-	compile group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
 
-	//open API
-	implementation("org.springdoc:springdoc-openapi-ui:1.4.3")
+	// https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
+	compile group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.3.5.RELEASE'
+	
 	//spring security & jwt
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.jsonwebtoken:jjwt-api:0.10.7',
