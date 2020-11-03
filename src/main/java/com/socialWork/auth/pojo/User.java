@@ -32,16 +32,4 @@ public class User implements Serializable {
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "userId")}, inverseJoinColumns = {@JoinColumn(name = "rid", referencedColumnName = "roleId")})
     private List<Role> roles;
 
-<<<<<<< HEAD
-    public User() {
-
-    }
-
-    public User(String username, String password, List<Role> roles) {
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
-    }
-=======
->>>>>>> origin/hevinlocal
 }

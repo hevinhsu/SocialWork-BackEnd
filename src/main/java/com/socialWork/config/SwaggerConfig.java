@@ -39,8 +39,8 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Social Work Controller API 說明文件")
-                .description("Project GitHub:https://github.com/hevinhsu/socialWork")
-                .termsOfServiceUrl("https://github.com/hevinhsu/socialWork")
+                .description("Project GitHub:https://github.com/NTUTJAVA/SocialWork")
+                .termsOfServiceUrl("https://github.com/NTUTJAVA/SocialWork")
                 .license("Apache 2.0")
                 .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
                 .version("Dev")
