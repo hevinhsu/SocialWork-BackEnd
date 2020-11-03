@@ -21,6 +21,7 @@ import com.socialWork.Util.JWTTokenUtils;
 import com.socialWork.auth.loginDto.LoginDto;
 import com.socialWork.auth.repository.UserRepository;
 import com.socialWork.config.WebSecurityConfig;
+import com.socialWork.exceptions.LoginException;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -41,8 +42,9 @@ public class AuthController {
 //	通過使用者名稱和密碼建立一個 Authentication 認證物件，實現類為 UsernamePasswordAuthenticationToken
 	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(),loginDTO.getPassword());
 	if (Objects.nonNull(authenticationToken)){
+		System.out.println(authenticationToken.getPrincipal().toString());
 		userRepository.findByUsername(authenticationToken.getPrincipal().toString())
-		.orElseThrow(()->new Exception("使用者不存在"));
+		.orElseThrow(()->new LoginException("使用者不存在"));
 	}
 	try {
 			//通過 AuthenticationManager（預設實現為ProviderManager）的authenticate方法驗證 Authentication 物件
@@ -53,7 +55,7 @@ public class AuthController {
 			httpResponse.addHeader(WebSecurityConfig.AUTHORIZATION_HEADER,"Bearer " + token);
 			return "Bearer " + token;
 		}catch (BadCredentialsException authentication){
-			throw new Exception("密碼錯誤");
+			throw new LoginException("密碼錯誤");
 		}
 	}
 	
