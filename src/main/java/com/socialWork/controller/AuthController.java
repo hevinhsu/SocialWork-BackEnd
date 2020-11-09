@@ -49,9 +49,8 @@ public class AuthController {
 	private JWTTokenUtils jwtTokenUtils;
 	@Autowired
 	private AuthService authService;
-	
-	
-	private ObjectMapper objectMapper = new ObjectMapper();
+	@Autowired
+	private ObjectMapper objectMapper;
 	
 	@ApiResponses(value = {@ApiResponse(code = 500, message = "Account not found")})
 	@RequestMapping(value = "/login",method = RequestMethod.POST)
@@ -88,8 +87,6 @@ public class AuthController {
 	
 	@RequestMapping(value = "/register",method = RequestMethod.POST)
 	public String register(@RequestBody @Validated RegisterDto registerDto) throws Exception {
-		Optional<User> userOpt = userRepository.findByUsername(registerDto.getUsername());
-		if(userOpt.isPresent()) throw new RegisterException("帳號重複");
 		authService.register(registerDto, Arrays.asList(Role.USER));
 		return "success!";
 	}

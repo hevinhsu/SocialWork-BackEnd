@@ -29,12 +29,13 @@ public class systenExceptionHandler {
 	
 	@ExceptionHandler(RegisterException.class)
 	public Object registerExceptionHandler(RegisterException e) {
-		log.error("register fail");
+		log.error("register fail",e);
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public Object invalidParameterHandler(MethodArgumentNotValidException e) {
+		log.error("wrong parameter", e);
 		BindingResult exceptions = e.getBindingResult();
 		if (exceptions.hasErrors()) {
             List<ObjectError> errors = exceptions.getAllErrors();
@@ -61,8 +62,8 @@ public class systenExceptionHandler {
 	
 	
 	@ExceptionHandler(Exception.class)
-	public Object uncatchExceptionHandler() {
-		log.error("found uncatch exception throwing");
+	public Object uncatchExceptionHandler(Exception e) {
+		log.error("found uncatch exception throwing", e);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("System Error");
 	}
 	

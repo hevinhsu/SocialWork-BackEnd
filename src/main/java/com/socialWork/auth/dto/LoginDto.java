@@ -7,8 +7,10 @@ import javax.validation.constraints.NotBlank;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 @ApiModel(description = "login validate Dto")
 public class LoginDto implements Serializable {
 	/**
