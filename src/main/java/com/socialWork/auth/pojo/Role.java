@@ -15,6 +15,10 @@ public class Role implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -7221779844031532190L;
+	public static final long USER = 1L;
+	public static final long ADMIN = 2L;
+	public static final long ROLE_ADMIN = 3L;
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long roleId;

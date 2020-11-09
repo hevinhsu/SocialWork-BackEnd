@@ -36,3 +36,4 @@
 * 10/13 [Spring Security基礎設定](https://hackmd.io/aCPS0qYeQ6O2Wq7O1QsCBQ?both)
 * 10/29、10/30 [解決Spring Security設定問題](https://hackmd.io/GDnU7AhJQkqEXOd5ICfJHA)
 * 11/02 [SwaggerUI設定](https://hackmd.io/fsUVJPBSTwqQfi9UDs5uDA?both)
+* 11/04-11/08 [前端:註冊頁面，後端:註冊API](https://hackmd.io/K8ci1BgXQKW1WMg9XUIw3Q?both)

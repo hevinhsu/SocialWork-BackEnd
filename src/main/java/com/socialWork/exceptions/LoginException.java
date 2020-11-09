@@ -1,7 +1,12 @@
 package com.socialWork.exceptions;
 
+/**
+ * throws exceptions when something invalid during login
+ * 
+ * @author HevinHsu
+ *
+ */
 public class LoginException extends RuntimeException{
-
 	/**
 	 * 
 	 */

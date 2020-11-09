@@ -1,4 +1,4 @@
-package com.socialWork.auth.loginDto;
+package com.socialWork.auth.dto;
 
 import java.io.Serializable;
 
