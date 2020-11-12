@@ -41,6 +41,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	        "/v3/api-docs",
 	        "/webjars/**"
 	};
+	String[] AUTH_CONTROLLER_WITHLIST = {
+			"/auth/login",
+			"/auth/register",
+			"/auth/testLogin"
+	};
+	String[] USER_CONTROLLER_WITHLIST = {
+			"/info/**",
+			"/showEditBtn/**",
+	};
 	@Autowired
 	private UserDetailsService userDetailsService;
 
@@ -59,10 +68,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// 由於使用Token，所以不需要Session
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				// 驗證Http請求
-				.authorizeRequests().antMatchers("/").permitAll().antMatchers("/auth/testLogin").permitAll()
+				.authorizeRequests().antMatchers("/").permitAll()
                 .antMatchers(SWAGGER_WHITELIST).permitAll()
-				.antMatchers("/auth/login").permitAll()
-				.antMatchers("/auth/register").permitAll()
+				.antMatchers(AUTH_CONTROLLER_WITHLIST).permitAll()
+				.antMatchers(USER_CONTROLLER_WITHLIST).permitAll()
 				.antMatchers("/auth/test").hasRole("ADMIN")
 				.antMatchers("/test").hasAnyRole("USER")
 				.anyRequest().authenticated();

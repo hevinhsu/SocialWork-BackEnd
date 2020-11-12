@@ -7,16 +7,17 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UserDto {
+public final class UserInfoDto {
 	private Long id;
-	private String password;
 	private String email;
 	private String nickname;
 	
-	public UserDto(User user){
-		this.id = user.getUserId();
-		this.password = user.getPassword();
+	private UserInfoDto(User user, boolean isView){
+		this.id = isView? 0 : user.getUserId();
 		this.email = user.getEmail();
 		this.nickname = user.getNickname();
+	}
+	public static UserInfoDto of(User user, boolean isView) {
+		return new UserInfoDto(user, isView);
 	}
 }

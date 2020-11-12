@@ -26,7 +26,7 @@ public class JWTTokenUtils  {
 	private static final Logger log = LoggerFactory.getLogger("JWTTokenUtils.class");
 
 	
-    static final long EXPIRATIONTIME = 60 * 60;     // 1h
+    static final long EXPIRATIONTIME = 60 * 15;     // 1h
     static final String AUTHORITIES_KEY = "auth";
     static final String TOKEN_PREFIX = "Bearer";        // Token前缀
     static final String HEADER_STRING = "Authorization";// 存放Token的Header Key

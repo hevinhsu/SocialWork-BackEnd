@@ -12,7 +12,7 @@ import lombok.ToString;
 @Data
 @ToString
 @ApiModel(description = "login validate Dto")
-public class LoginDto implements Serializable {
+public final class LoginDto implements Serializable {
 	/**
 	 * 
 	 */

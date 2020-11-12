@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.socialWork.auth.dto.RegisterDto;
+import com.socialWork.auth.dto.EditUserDto;
 import com.socialWork.auth.pojo.Role;
 import com.socialWork.auth.pojo.User;
 import com.socialWork.auth.repository.UserRepository;
@@ -37,12 +37,12 @@ public class AuthServiceTest {
 	@Test
 	@Transactional
 	public void testRegiser() throws Exception {
-		RegisterDto registerDto = new RegisterDto();
-		registerDto.setUsername(username);
-		registerDto.setPassword(password);
-		registerDto.setEmail(email);
-		registerDto.setNickname(nickname);
-		authService.register(registerDto, Arrays.asList(Role.USER));
+		EditUserDto editUserDto = new EditUserDto();
+		editUserDto.setUsername(username);
+		editUserDto.setPassword(password);
+		editUserDto.setEmail(email);
+		editUserDto.setNickname(nickname);
+		authService.register(editUserDto, Arrays.asList(Role.USER));
 		User user = userRepo.findByUsername(username).orElse(null);
 		assertEquals(username, user.getUsername());
 		assertEquals(true, passwordEncoder.matches(password, user.getPassword()));

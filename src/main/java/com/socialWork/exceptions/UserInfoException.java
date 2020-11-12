@@ -5,16 +5,16 @@ package com.socialWork.exceptions;
  * 
  * @author HevinHsu
  */
-public class RegisterException extends RuntimeException {
+public class UserInfoException extends RuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2740954545297219982L;
-	public RegisterException() {
+	public UserInfoException() {
 		super();
 	}
-	public RegisterException(String msg) {
+	public UserInfoException(String msg) {
 		super(msg);
 	}
 

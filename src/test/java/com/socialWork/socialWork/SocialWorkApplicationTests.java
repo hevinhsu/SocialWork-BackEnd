@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.socialWork.auth.dto.EditUserDto;
 import com.socialWork.auth.dto.LoginDto;
-import com.socialWork.auth.dto.RegisterDto;
 import com.socialWork.auth.pojo.Role;
 import com.socialWork.auth.service.AuthService;
 
@@ -51,12 +51,12 @@ class SocialWorkApplicationTests {
 	@Test
 	@Transactional
 	void testLogin() throws Exception {
-		RegisterDto registerDto = new RegisterDto(); 
-		registerDto.setUsername("testController");
-		registerDto.setPassword("testCon123");
-		registerDto.setEmail("test@xxx.xxx");
-		registerDto.setNickname("XXXX");
-		authService.register(registerDto, Arrays.asList(Role.USER));
+		EditUserDto editUserDto = new EditUserDto(); 
+		editUserDto.setUsername("testController");
+		editUserDto.setPassword("testCon123");
+		editUserDto.setEmail("test@xxx.xxx");
+		editUserDto.setNickname("XXXX");
+		authService.register(editUserDto, Arrays.asList(Role.USER));
 		loginDto = new LoginDto();
 		loginDto.setUsername("testController");
 		loginDto.setPassword("testCon123");

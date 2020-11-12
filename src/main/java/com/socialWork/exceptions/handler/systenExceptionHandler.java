@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.socialWork.exceptions.LoginException;
-import com.socialWork.exceptions.RegisterException;
+import com.socialWork.exceptions.UserInfoException;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
@@ -27,9 +28,9 @@ public class systenExceptionHandler {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 	}
 	
-	@ExceptionHandler(RegisterException.class)
-	public Object registerExceptionHandler(RegisterException e) {
-		log.error("register fail",e);
+	@ExceptionHandler(UserInfoException.class)
+	public Object registerExceptionHandler(UserInfoException e) {
+		log.error("register or edit UserInfo failed",e);
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 	}
 	
@@ -60,7 +61,10 @@ public class systenExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
 	
-	
+	@ExceptionHandler(ExpiredJwtException.class)
+	public Object jwtExpiredHandler(ExpiredJwtException e) {
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Expired JWT token");
+	}
 	@ExceptionHandler(Exception.class)
 	public Object uncatchExceptionHandler(Exception e) {
 		log.error("found uncatch exception throwing", e);
