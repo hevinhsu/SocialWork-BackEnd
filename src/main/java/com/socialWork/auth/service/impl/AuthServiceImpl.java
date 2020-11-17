@@ -1,5 +1,6 @@
 package com.socialWork.auth.service.impl;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,8 @@ public class AuthServiceImpl implements AuthService {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private RoleRepository roleRepo;
+	private Timestamp now = new Timestamp(System.currentTimeMillis());
+	
 	@Override
 	@Transactional
 	public void register(EditUserDto editUserDto, List<Long> roleIds) throws Exception {
@@ -43,6 +46,7 @@ public class AuthServiceImpl implements AuthService {
 								  .email(editUserDto.getEmail())
 								  .nickname(editUserDto.getNickname())
 								  .roles(roleList)
+								  .createTime(now)
 								  .build();
 		userRepo.save(user);
 		log.info(editUserDto.getNickname() + "create new account,username = "+editUserDto.getUsername());
@@ -55,6 +59,7 @@ public class AuthServiceImpl implements AuthService {
 			user.setPassword(passwordEncoder.encode(editUserDto.getPassword()));
 			user.setEmail(editUserDto.getEmail());
 			user.setNickname(editUserDto.getNickname());
+			user.setUpdateTime(now);
 			userRepo.save(user);
 			return user;
 	}

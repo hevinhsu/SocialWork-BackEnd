@@ -1,14 +1,22 @@
 package com.socialWork.auth.pojo;
 
-import lombok.Data;
-
-import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
-//@Table(name = "role")
 @Data
+@NoArgsConstructor
 public class Role implements Serializable {
 
     /**
@@ -24,7 +32,14 @@ public class Role implements Serializable {
     Long roleId;
     @Column(name = "rolename", nullable = false)
     String roleName;
+    @Column(name = "createTime", nullable = false)
+    Timestamp createTime;
 
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
+    
+    public Role(String roleName, Timestamp createTime) {
+    	this.roleName = roleName;
+    	this.createTime = createTime;
+    }
 }

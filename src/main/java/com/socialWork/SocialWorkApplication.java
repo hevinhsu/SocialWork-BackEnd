@@ -1,5 +1,6 @@
 package com.socialWork;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,17 @@ public class SocialWorkApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Role role = new Role();
-		role.setRoleName("ROLE_USER");
-		Role role1 = new Role();
-		role1.setRoleName("ROLE_ADMIN");
+		Timestamp now = new  Timestamp(System.currentTimeMillis());
+		Role role = new Role("ROLE_USER", now);
+		Role role1 = new Role("ROLE_ADMIN", now);
 		roleRepo.save(role);
 		roleRepo.save(role1);
 		
-		User user = new User(null, "test", "$2a$10$C5EM7Y4NeBerGx8STduaxOBCAf4g9wdPBKSUErhTKS.lNOfziZnPe", "test@xxx.xx", "nickTest", "", Arrays.asList(role, role1));
+		
+		User user = new User(null, "test", "$2a$10$C5EM7Y4NeBerGx8STduaxOBCAf4g9wdPBKSUErhTKS.lNOfziZnPe", "test@xxx.xx", "nickTest", "", now, null, Arrays.asList(role, role1));
 		userRepo.save(user);
+		User user2 = new User(null, "test2", "$2a$10$C5EM7Y4NeBerGx8STduaxOBCAf4g9wdPBKSUErhTKS.lNOfziZnPe", "test@xxx.xx", "nickTest", "", now, null, Arrays.asList(role, role1));
+		userRepo.save(user2);
 	}
 
 
