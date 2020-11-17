@@ -47,8 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			"/auth/testLogin"
 	};
 	String[] USER_CONTROLLER_WITHLIST = {
-			"/info/**",
-			"/showEditBtn/**",
+			"/user/info/**",
+			"/user/showEditBtn/**",
 	};
 	@Autowired
 	private UserDetailsService userDetailsService;

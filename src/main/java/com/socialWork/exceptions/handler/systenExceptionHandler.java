@@ -24,8 +24,13 @@ public class systenExceptionHandler {
 
 	@ExceptionHandler(LoginException.class)
 	public Object loginExceptionHandler(LoginException e) {
-		log.error("login fail");
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+		if(e.getMessage().equals("no match user")) {
+			log.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}else {
+			log.error("login fail");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+		}
 	}
 	
 	@ExceptionHandler(UserInfoException.class)
@@ -63,6 +68,7 @@ public class systenExceptionHandler {
 	
 	@ExceptionHandler(ExpiredJwtException.class)
 	public Object jwtExpiredHandler(ExpiredJwtException e) {
+		log.error("Exipred JWT Token");
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Expired JWT token");
 	}
 	@ExceptionHandler(Exception.class)
