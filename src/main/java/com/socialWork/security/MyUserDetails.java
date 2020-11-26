@@ -9,8 +9,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.socialWork.auth.pojo.Role;
-import com.socialWork.auth.pojo.User;
+import com.socialWork.auth.entity.Role;
+import com.socialWork.auth.entity.User;
 
 public class MyUserDetails implements UserDetails {
     /**

@@ -1,4 +1,4 @@
-package com.socialWork.auth.pojo;
+package com.socialWork.auth.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

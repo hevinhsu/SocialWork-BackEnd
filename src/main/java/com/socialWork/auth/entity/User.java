@@ -1,4 +1,4 @@
-package com.socialWork.auth.pojo;
+package com.socialWork.auth.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -45,8 +45,6 @@ public class User implements Serializable {
     @Column(name = "nickname", nullable = false)
     String nickname;
 
-    @Column(name = "refresh_token")
-    String refreshToken;
     @Column(name = "createTime", nullable = false)
     Timestamp createTime;
     @Column(name = "updateTime")

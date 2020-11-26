@@ -1,6 +1,6 @@
 package com.socialWork.auth.dto;
 
-import com.socialWork.auth.pojo.User;
+import com.socialWork.auth.entity.User;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

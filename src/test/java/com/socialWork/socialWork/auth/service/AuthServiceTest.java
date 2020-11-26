@@ -14,8 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.socialWork.auth.dto.EditUserDto;
-import com.socialWork.auth.pojo.Role;
-import com.socialWork.auth.pojo.User;
+import com.socialWork.auth.entity.Role;
+import com.socialWork.auth.entity.User;
 import com.socialWork.auth.repository.UserRepository;
 import com.socialWork.auth.service.AuthService;
 
@@ -49,5 +49,4 @@ public class AuthServiceTest {
 		assertEquals(nickname, user.getNickname());
 		assertEquals(email, user.getEmail());
 	}
-	
 }

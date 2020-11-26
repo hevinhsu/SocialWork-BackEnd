@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.socialWork.auth.dto.EditUserDto;
 import com.socialWork.auth.dto.UserInfoDto;
-import com.socialWork.auth.pojo.User;
+import com.socialWork.auth.entity.User;
 import com.socialWork.auth.service.AuthService;
 import com.socialWork.exceptions.UserInfoException;
 

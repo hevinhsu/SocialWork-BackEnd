@@ -44,30 +44,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	String[] AUTH_CONTROLLER_WITHLIST = {
 			"/auth/login",
 			"/auth/register",
-			"/auth/testLogin"
+			"/auth/testLogin",
+			"/auth/refresh"
 	};
 	String[] USER_CONTROLLER_WITHLIST = {
 			"/user/info/**",
-			"/user/showEditBtn/**",
 	};
 	@Autowired
 	private UserDetailsService userDetailsService;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth
-				// 自定義獲取使用者資訊
-				.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 		auth.inMemoryAuthentication().withUser("admin").password(passwordEncoder().encode("admin")).roles("USER").roles("ADMIN");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().formLogin().disable()
-				// 由於使用Token，所以不需要Session
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				// 驗證Http請求
 				.authorizeRequests().antMatchers("/").permitAll()
                 .antMatchers(SWAGGER_WHITELIST).permitAll()
 				.antMatchers(AUTH_CONTROLLER_WITHLIST).permitAll()
@@ -76,7 +71,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/test").hasAnyRole("USER")
 				.anyRequest().authenticated();
 
-		// 新增JWT filter
 		http.addFilterBefore(genericFilterBean(), UsernamePasswordAuthenticationFilter.class).exceptionHandling()
 				.authenticationEntryPoint(JwtAuthenticationEntryPoint()).accessDeniedHandler(JwtAccessDeniedHandler());
 	}

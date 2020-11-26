@@ -23,7 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.socialWork.auth.dto.EditUserDto;
 import com.socialWork.auth.dto.LoginDto;
-import com.socialWork.auth.pojo.Role;
+import com.socialWork.auth.entity.Role;
 import com.socialWork.auth.service.AuthService;
 
 @SpringBootTest

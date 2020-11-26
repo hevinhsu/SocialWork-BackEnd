@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
-public class systenExceptionHandler {
+public class SystenExceptionHandler {
 
 	@ExceptionHandler(LoginException.class)
 	public Object loginExceptionHandler(LoginException e) {
