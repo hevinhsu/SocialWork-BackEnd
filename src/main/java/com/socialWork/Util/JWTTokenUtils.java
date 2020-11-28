@@ -36,12 +36,10 @@ public class JWTTokenUtils  {
     static final Key key = MacProvider.generateKey();
     
     public String createToken(Authentication authentication){
-        String authorities = authentication.getAuthorities().stream()  //獲取使用者的許可權字串，如 USER,ADMIN
+        String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        System.out.println("expiration time = "+EXPIRATIONTIME);
-        Date validity = (new Date(System.currentTimeMillis() + EXPIRATIONTIME * 1000*60)); //存放過期時間
-        System.out.println(validity);
+        Date validity = (new Date(System.currentTimeMillis() + EXPIRATIONTIME * 1000*60));
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY,authorities)

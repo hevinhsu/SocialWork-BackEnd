@@ -123,7 +123,12 @@ public class AuthServiceImpl implements AuthService {
 		
 		User user = userRepo.findById(refreshDto.getUserId())
 							.orElseThrow( ()->new LoginException("使用者不存在"));
-		Collection<? extends GrantedAuthority> authorities = (Collection<? extends GrantedAuthority>) user.getRoles().stream().map(list->list.getRoleName()).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+		Collection<? extends GrantedAuthority> authorities = 
+							(Collection<? extends GrantedAuthority>) user.getRoles()
+							.stream()
+							.map(list->list.getRoleName())
+							.map(SimpleGrantedAuthority::new)
+							.collect(Collectors.toList());
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 				user.getUsername(), "", authorities);
 		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
