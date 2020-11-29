@@ -16,6 +16,7 @@ import com.socialWork.auth.dto.EditUserDto;
 import com.socialWork.auth.dto.UserInfoDto;
 import com.socialWork.auth.entity.User;
 import com.socialWork.auth.service.AuthService;
+import com.socialWork.auth.service.UserService;
 import com.socialWork.exceptions.UserInfoException;
 
 import io.swagger.annotations.Api;
@@ -29,26 +30,17 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController extends BaseController {
 	@Autowired
 	private AuthService authService;
+	@Autowired
+	private UserService userService;
 
-	@RequestMapping(value = "/info/{username}", method = RequestMethod.GET)
+	@RequestMapping(value = "/info/{username}/{userId}", method = RequestMethod.GET)
 	@ApiOperation(notes = "不限身分，查詢使用者資訊", value = "")
-	public String getUserInfo(@PathVariable("username") String username)
+	public String getUserInfo(@PathVariable("username") String username, @PathVariable("userId") Long userId)
 			throws JsonProcessingException, UserInfoException {
-		log.info("get user information: username = " + username);
-		User user = userRepository.findByUsername(username)
-				.orElseThrow(() -> new UserInfoException("no match user"));
-		return objectMapper.writeValueAsString(UserInfoDto.of(user, true));
-	}
-
-	@RequestMapping(value = "/showEditBtn", method = RequestMethod.GET)
-	@ApiOperation(notes = "能編輯使用者資訊權限查詢", value = "")
-	public Boolean showEditBtn(@RequestParam String username,
-			@RequestParam(required = false, name = "userId") Long id) {
-		log.info("search sohw edit btn. username = " + username + ", id = " + id);
-		if (Objects.isNull(id))
-			return false;
-		return userRepository.findByUsername(username).map(User::getUserId).filter(userId -> userId.equals(id))
-				.isPresent();
+		if(Objects.isNull(username) || username.trim().length()==0) throw new UserInfoException("使用者名稱不可為空");
+		log.info("get user information: username = " + username + " userId = " + userId);
+		UserInfoDto dto = userService.findUserInfo(username, userId);
+		return objectMapper.writeValueAsString(dto);
 	}
 
 	@RequestMapping(value = "/saveEdit", method = RequestMethod.POST)
@@ -56,7 +48,7 @@ public class UserController extends BaseController {
 	public String saveEditBtn(@RequestBody @Validated EditUserDto editUserDto) throws JsonProcessingException {
 		if (Objects.isNull(editUserDto.getUserId())) throw new UserInfoException("invalid params");
 		User user = authService.updateUserInfo(editUserDto);
-		return objectMapper.writeValueAsString(UserInfoDto.of(user, false));
+		return objectMapper.writeValueAsString(UserInfoDto.of(user));
 	}
 }
 

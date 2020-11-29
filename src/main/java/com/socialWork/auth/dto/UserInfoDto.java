@@ -11,13 +11,19 @@ public final class UserInfoDto {
 	private Long id;
 	private String email;
 	private String nickname;
+	private Boolean canEdit;
 	
-	private UserInfoDto(User user, boolean isView){
+	private UserInfoDto(User user, boolean isView, boolean canEdit){
 		this.id = isView? 0 : user.getUserId();
 		this.email = user.getEmail();
 		this.nickname = user.getNickname();
+		this.canEdit = canEdit;
 	}
-	public static UserInfoDto of(User user, boolean isView) {
-		return new UserInfoDto(user, isView);
+	public static UserInfoDto of(User user) {
+		return new UserInfoDto(user, false, false);
+	}
+	
+	public static UserInfoDto of(User user, Long userId) {
+		return new UserInfoDto(user, true, user.getUserId().equals(userId));
 	}
 }

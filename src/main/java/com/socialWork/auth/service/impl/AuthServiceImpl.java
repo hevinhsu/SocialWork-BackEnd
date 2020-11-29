@@ -92,7 +92,6 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	@Transactional
 	public LoginSuccessDto login(LoginDto loginDto) throws Exception{
-		// TODO Auto-generated method stub
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 				loginDto.getUsername(), loginDto.getPassword());
 		if (Objects.isNull(authenticationToken)) return null;
