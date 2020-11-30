@@ -38,3 +38,5 @@
 * 11/02 [SwaggerUI設定](https://hackmd.io/fsUVJPBSTwqQfi9UDs5uDA?both)
 * 11/04-11/08 [前端:註冊頁面；後端:註冊API](https://hackmd.io/K8ci1BgXQKW1WMg9XUIw3Q?both)
 * 11/09-11/12 [前端:會員資料預覽、編輯、Confirm Component；後端:查詢會員資料、更新會員資料相關API、ExceptionHandler新增會員資料改動產生的Exception](https://hackmd.io/1SIfOeRNSoanEDjwEyRTJg)
+* 11/13-11/28 [refresh jwt token part1](https://hackmd.io/fh1njno7QQ6Y8IKfJBoviQ)
+* [refresh jwt token part2](https://hackmd.io/g7-IcniJRXyE6lNkUqE07g)

@@ -1,18 +1,17 @@
 package com.socialWork.socialWork;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Arrays;
 
 import javax.transaction.Transactional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -26,8 +25,8 @@ import com.socialWork.auth.dto.LoginDto;
 import com.socialWork.auth.entity.Role;
 import com.socialWork.auth.service.AuthService;
 
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
-@RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 class SocialWorkApplicationTests {
 
@@ -67,7 +66,7 @@ class SocialWorkApplicationTests {
 					.content(objectMapper.writeValueAsString(loginDto))
 					.accept(MediaType.APPLICATION_JSON)).andReturn();
 			int status = result.getResponse().getStatus();
-			assertEquals("success", 200, status);
+			Assertions.assertEquals(200, status, "success");
 		}
 		catch(Exception ex){
 			ex.printStackTrace();

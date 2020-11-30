@@ -1,17 +1,16 @@
 package com.socialWork.socialWork.auth.service;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Arrays;
 
 import javax.transaction.Transactional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.socialWork.auth.dto.EditUserDto;
 import com.socialWork.auth.entity.Role;
@@ -19,8 +18,8 @@ import com.socialWork.auth.entity.User;
 import com.socialWork.auth.repository.UserRepository;
 import com.socialWork.auth.service.AuthService;
 
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
-@RunWith(SpringJUnit4ClassRunner.class)
 public class AuthServiceTest {
 	@Autowired
 	private AuthService authService;
@@ -44,9 +43,9 @@ public class AuthServiceTest {
 		editUserDto.setNickname(nickname);
 		authService.register(editUserDto, Arrays.asList(Role.USER));
 		User user = userRepo.findByUsername(username).orElse(null);
-		assertEquals(username, user.getUsername());
-		assertEquals(true, passwordEncoder.matches(password, user.getPassword()));
-		assertEquals(nickname, user.getNickname());
-		assertEquals(email, user.getEmail());
+		Assertions.assertEquals(username, user.getUsername());
+		Assertions.assertEquals(true, passwordEncoder.matches(password, user.getPassword()));
+		Assertions.assertEquals(nickname, user.getNickname());
+		Assertions.assertEquals(email, user.getEmail());
 	}
 }

@@ -28,12 +28,14 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testCompileOnly 'org.projectlombok:lombok:1.18.12'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12' 
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-
-	//junit
-	testCompile 'junit:junit:4.+'
+	
+    testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'junit', module: 'junit' // 排除JUnit 4的依賴
+    }
+    
+    // JUnit 5 依賴設定
+    testImplementation 'org.junit.jupiter:junit-jupiter-api' // JUnit 5 API 介面
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine' // JUnit 5 測試框架的實作
 
 	// this is for mysql java connector
 	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
