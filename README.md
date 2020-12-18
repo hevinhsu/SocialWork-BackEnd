@@ -1,30 +1,41 @@
-# 測試小專案
+# 助人者論壇專案
+這是一個藉著練習前後端分離，並以助人者論壇為題的專案前端以VueCLI3，後端以SpringBoot為主的專案，也希望這之後能順利上線，歡迎code review 或發pr，或是意外被助人工作者看到，能提供些意見。
 專案API文檔: [http://localhost:8080/swagger-ui/](http://localhost:8080/swagger-ui/)
 
 預計開發論壇
 功能有:
-1. 留言板
-2. 爬蟲爬靠北社工?
-3. 登入功能(留言板用)
-4. 其他再想想
+1. 登入功能(留言、發文用)
+2. 留言板
+3. 爬蟲爬靠北社工?
+4. 發文區
+5. 管理員後台
+6. 其他再想想
 
 # 預計使用技術:
 ### 前端:
-* Vue
-* Bootstrap3/4
+- [x] Vue3
+- [x] Bootstrap3/4
+- [X] ElementUI
 ### 後端:
-* Spring boot
-* Spring Data JPA
-* Spring Security
+- [X] Spring boot
+- [X] Spring Data JPA
+- [X] Spring Security
 
 ### 其他:
-* swagger
-* gradle
-
+- [X] swagger
+- [X] gradle
+- [ ] redis
 ### DB:
 * MySQL or PostgreSQL(目前使用Mysql)
 
+# 安裝步驟
+此處為後端專案，需要具備以下環境：
+1. Java JDK 11
+2. [gradle](https://www.1ju.org/gradle/how-install-gradle-windows)(如果在Eclipse，需安裝[外掛](https://rx1226.pixnet.net/blog/post/321583836))
+3. [Lombok](https://polinwei.com/lombok-install-in-eclipse/)
+4. MySQL(建立 ```social_work``` 資料庫)
 
+並在application.yml中，更改裡頭的環境變數
 
 # 參考資料
 * [Springdoc](https://waynestalk.com/springdoc-openapi-tutorial/)
