@@ -1,4 +1,4 @@
-package com.socialWork.auth.dto;
+package com.socialWork.auth.vo;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,7 +13,7 @@ import lombok.ToString;
 @Data
 @ToString
 @ApiModel(description = "register/update User validate Dto")
-public class EditUserDto {
+public class EditUserVo {
 	@ApiModelProperty(value = "Id")
 	private Long userId;
 	@NotBlank(message = "使用者名稱不能為空")

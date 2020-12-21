@@ -27,17 +27,22 @@ public class SocialWorkApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		System.out.println("     ============ insert basic data in database ============");
+
 		Timestamp now = new  Timestamp(System.currentTimeMillis());
 		Role role = new Role("ROLE_USER", now);
 		Role role1 = new Role("ROLE_ADMIN", now);
 		roleRepo.save(role);
 		roleRepo.save(role1);
 		
-		
 		User user = new User(null, "test", "$2a$10$C5EM7Y4NeBerGx8STduaxOBCAf4g9wdPBKSUErhTKS.lNOfziZnPe", "test@xxx.xx", "nickTest", now, null, Arrays.asList(role, role1));
 		userRepo.save(user);
+		System.out.println("     =            insert username :test                    =");
 		User user2 = new User(null, "test2", "$2a$10$C5EM7Y4NeBerGx8STduaxOBCAf4g9wdPBKSUErhTKS.lNOfziZnPe", "test@xxx.xx", "nickTest", now, null, Arrays.asList(role, role1));
 		userRepo.save(user2);
+		System.out.println("     =            insert username :test2                   =");
+		
+		System.out.println("     ============       insert completed        ============");
 	}
 
 

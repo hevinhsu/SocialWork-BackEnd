@@ -43,7 +43,7 @@ public class JwtAuthenticationTokenFilter extends GenericFilterBean {
             }
             filterChain.doFilter(servletRequest, servletResponse);
         }catch (ExpiredJwtException e){
-            String token = authService.createRefreshToken();
+            String token = authService.createRefreshToken(servletRequest.getRemoteAddr());
             Map<String, String> tokenMap = new HashMap<>();
             tokenMap.put("refreshToken", token);
             HttpServletResponse response = (HttpServletResponse) servletResponse;

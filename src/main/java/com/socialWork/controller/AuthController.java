@@ -2,6 +2,7 @@ package com.socialWork.controller;
 
 import java.util.Arrays;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.socialWork.auth.dto.EditUserDto;
-import com.socialWork.auth.dto.LoginDto;
+import com.socialWork.Util.AccessAddressUtils;
 import com.socialWork.auth.dto.LoginSuccessDto;
-import com.socialWork.auth.dto.RefreshDto;
 import com.socialWork.auth.entity.Role;
 import com.socialWork.auth.service.AuthService;
+import com.socialWork.auth.vo.EditUserVo;
+import com.socialWork.auth.vo.LoginVo;
+import com.socialWork.auth.vo.RefreshVo;
 import com.socialWork.config.WebSecurityConfig;
 import com.socialWork.exceptions.LoginException;
 
@@ -40,10 +42,10 @@ public class AuthController extends BaseController {
 	@ApiResponses(value = { @ApiResponse(code = 500, message = "Account not found") })
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ApiOperation(notes = "登入", value = "")
-	public String login(@RequestBody @Validated LoginDto loginDto, HttpServletResponse httpResponse) throws Exception {
-		log.info("user login: " + loginDto.getUsername());
+	public String login(@RequestBody @Validated LoginVo loginVo, HttpServletResponse httpResponse) throws Exception {
+		log.info("user login: " + loginVo.getUsername());
 		try {
-			LoginSuccessDto loginSuccessDto = authService.login(loginDto);
+			LoginSuccessDto loginSuccessDto = authService.login(loginVo);
 			httpResponse.addHeader(WebSecurityConfig.AUTHORIZATION_HEADER, loginSuccessDto.jwtToken);
 			return objectMapper.writeValueAsString(loginSuccessDto);
 		} catch (BadCredentialsException authentication) {
@@ -61,15 +63,16 @@ public class AuthController extends BaseController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ApiOperation(notes = "註冊", value = "")
-	public String register(@RequestBody @Validated EditUserDto editUserDto) throws Exception {
+	public String register(@RequestBody @Validated EditUserVo editUserDto) throws Exception {
 		authService.register(editUserDto, Arrays.asList(Role.USER));
 		return "success!";
 	}
 	
 	@RequestMapping(value = "/refresh", method = RequestMethod.POST)
 	@ApiOperation(notes = "用refresh token 重新登入", value = "")
-	public String refresh(@RequestBody @Validated RefreshDto refreshDto) throws JsonProcessingException {
-		LoginSuccessDto loginSuccessDto = authService.refresh(refreshDto);
+	public String refresh(@RequestBody @Validated RefreshVo refreshVo, HttpServletRequest request) throws JsonProcessingException {
+		refreshVo.setIp(AccessAddressUtils.getIpAddress(request));
+		LoginSuccessDto loginSuccessDto = authService.refresh(refreshVo);
 		return objectMapper.writeValueAsString(loginSuccessDto);
 	}
 }

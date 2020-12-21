@@ -53,6 +53,11 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.10.7',
 			'io.jsonwebtoken:jjwt-impl:0.10.7',
 			'io.jsonwebtoken:jjwt-jackson:0.10.7'
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// https://mvnrepository.com/artifact/redis.clients/jedis
+	compile group: 'redis.clients', name: 'jedis', version: '3.3.0'
 
 }
 

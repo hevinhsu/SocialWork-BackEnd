@@ -7,8 +7,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,19 +17,19 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.socialWork.Util.JWTTokenUtils;
-import com.socialWork.auth.dto.EditUserDto;
-import com.socialWork.auth.dto.LoginDto;
+import com.socialWork.Util.RedisUtils;
 import com.socialWork.auth.dto.LoginSuccessDto;
-import com.socialWork.auth.dto.RefreshDto;
-import com.socialWork.auth.entity.RefreshToken;
 import com.socialWork.auth.entity.Role;
 import com.socialWork.auth.entity.User;
-import com.socialWork.auth.repository.RefreshTokenRepository;
 import com.socialWork.auth.repository.RoleRepository;
 import com.socialWork.auth.repository.UserRepository;
 import com.socialWork.auth.service.AuthService;
+import com.socialWork.auth.vo.EditUserVo;
+import com.socialWork.auth.vo.LoginVo;
+import com.socialWork.auth.vo.RefreshVo;
 import com.socialWork.exceptions.LoginException;
 import com.socialWork.exceptions.UserInfoException;
 
@@ -50,40 +48,40 @@ public class AuthServiceImpl implements AuthService {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private RoleRepository roleRepo;
-	@Autowired
-	private RefreshTokenRepository refreshTokenRepo;
 	private Timestamp now = new Timestamp(System.currentTimeMillis());
 	@Value("${token.timeout.refresh}")
 	private long EXPIRATIONTIME;  
+	
 	@Override
-	@Transactional
-	public void register(EditUserDto editUserDto, List<Long> roleIds) throws Exception {
-		Optional<User> userOpt = userRepo.findByUsername(editUserDto.getUsername());
+	@Transactional(readOnly = true)
+	public void register(EditUserVo editUserVo, List<Long> roleIds) throws Exception {
+		Optional<User> userOpt = userRepo.findByUsername(editUserVo.getUsername());
 		if(userOpt.isPresent()) throw new UserInfoException("帳號重複");
 		if(roleIds==null || roleIds.isEmpty()) {
 			throw new Exception("無效的使用者權限");
 		}
 		List<Role> roleList = roleRepo.findAllById(roleIds);
-		User user = User.builder().username(editUserDto.getUsername())
-								  .password(passwordEncoder.encode(editUserDto.getPassword()))
-								  .email(editUserDto.getEmail())
-								  .nickname(editUserDto.getNickname())
+		User user = User.builder().username(editUserVo.getUsername())
+								  .password(passwordEncoder.encode(editUserVo.getPassword()))
+								  .email(editUserVo.getEmail())
+								  .nickname(editUserVo.getNickname())
 								  .roles(roleList)
 								  .createTime(now)
 								  .build();
 		userRepo.save(user);
-		log.info(editUserDto.getNickname() + "create new account,username = "+editUserDto.getUsername());
+		log.info(editUserVo.getNickname() + "create new account,username = "+editUserVo.getUsername());
 	}
 	
 	@Override
-	public User updateUserInfo(EditUserDto editUserDto) {
-		User user = userRepo.findByUsername(editUserDto.getUsername())
+	@Transactional
+	public User updateUserInfo(EditUserVo editUserVo) {
+		User user = userRepo.findByUsername(editUserVo.getUsername())
 				.orElseThrow(()-> new UserInfoException("查無此帳號"));
-		if(user.getUserId().longValue() != editUserDto.getUserId()) throw new UserInfoException("Id不正確");
+		if(user.getUserId().longValue() != editUserVo.getUserId()) throw new UserInfoException("Id不正確");
 		
-		user.setPassword(passwordEncoder.encode(editUserDto.getPassword()));
-		user.setEmail(editUserDto.getEmail());
-		user.setNickname(editUserDto.getNickname());
+		user.setPassword(passwordEncoder.encode(editUserVo.getPassword()));
+		user.setEmail(editUserVo.getEmail());
+		user.setNickname(editUserVo.getNickname());
 		user.setUpdateTime(now);
 		userRepo.save(user);
 		return user;
@@ -91,9 +89,9 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@Transactional
-	public LoginSuccessDto login(LoginDto loginDto) throws Exception{
+	public LoginSuccessDto login(LoginVo loginVo) throws Exception{
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-				loginDto.getUsername(), loginDto.getPassword());
+				loginVo.getUsername(), loginVo.getPassword());
 		if (Objects.isNull(authenticationToken)) return null;
 		
 		User user = userRepo.findByUsername(authenticationToken.getPrincipal().toString())
@@ -105,22 +103,21 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public String createRefreshToken() {
+	public String createRefreshToken(String ip) {
 		String token = JWTTokenUtils.createRefreshToken();
-		Timestamp expiredTime = new Timestamp(System.currentTimeMillis()+EXPIRATIONTIME*60*1000);
-		refreshTokenRepo.save(new RefreshToken(token, expiredTime));
+		int expiredTime = (int) (System.currentTimeMillis()+EXPIRATIONTIME*60*1000);
+		RedisUtils.hset(token, "ip", ip, expiredTime);
 		return token;
 	}
 	
-	@Transactional
 	@Override
-	public LoginSuccessDto refresh(RefreshDto refreshDto) {
-		RefreshToken refreshToken = refreshTokenRepo.findByToken(refreshDto.getRefreshToken())
-				.orElseThrow(() -> new LoginException("refresh token 不存在"));
-		if(refreshToken.getExpiredTime().before(now)) throw new LoginException("refresh token time out");
-		refreshTokenRepo.delete(refreshToken);
-		
-		User user = userRepo.findById(refreshDto.getUserId())
+	@Transactional(readOnly = true)
+	public LoginSuccessDto refresh(RefreshVo refreshVo) {
+		String token = refreshVo.getRefreshToken();
+		if(!RedisUtils.hasKey(token)) throw new LoginException("refresh token 不存在");
+		if(!RedisUtils.hget(token, "ip").toString().equals(refreshVo.getIp())) throw new LoginException("ip 不正確");
+		System.out.println("for test: "+RedisUtils.hasKey(refreshVo.getRefreshToken()));
+		User user = userRepo.findById(refreshVo.getUserId())
 							.orElseThrow( ()->new LoginException("使用者不存在"));
 		Collection<? extends GrantedAuthority> authorities = 
 							(Collection<? extends GrantedAuthority>) user.getRoles()

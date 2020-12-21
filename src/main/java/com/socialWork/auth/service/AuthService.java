@@ -2,22 +2,22 @@ package com.socialWork.auth.service;
 
 import java.util.List;
 
-import com.socialWork.auth.dto.EditUserDto;
-import com.socialWork.auth.dto.LoginDto;
 import com.socialWork.auth.dto.LoginSuccessDto;
-import com.socialWork.auth.dto.RefreshDto;
 import com.socialWork.auth.entity.User;
+import com.socialWork.auth.vo.EditUserVo;
+import com.socialWork.auth.vo.LoginVo;
+import com.socialWork.auth.vo.RefreshVo;
 
 public interface AuthService {
 
-	public void register(EditUserDto editUserDto, List<Long> roleIds) throws Exception;
+	public void register(EditUserVo editUserDto, List<Long> roleIds) throws Exception;
 
-	public User updateUserInfo(EditUserDto editUserDto);
+	public User updateUserInfo(EditUserVo editUserDto);
 
-	public LoginSuccessDto login(LoginDto loginDto) throws Exception;
+	public LoginSuccessDto login(LoginVo loginDto) throws Exception;
 
-	public LoginSuccessDto refresh(RefreshDto refreshDto);
+	public LoginSuccessDto refresh(RefreshVo refreshDto);
 	
-	public String createRefreshToken();
+	public String createRefreshToken(String ip);
 
 }

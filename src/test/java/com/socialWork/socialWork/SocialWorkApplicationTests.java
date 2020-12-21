@@ -20,10 +20,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.socialWork.auth.dto.EditUserDto;
-import com.socialWork.auth.dto.LoginDto;
 import com.socialWork.auth.entity.Role;
 import com.socialWork.auth.service.AuthService;
+import com.socialWork.auth.vo.EditUserVo;
+import com.socialWork.auth.vo.LoginVo;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -37,7 +37,7 @@ class SocialWorkApplicationTests {
 	@Autowired
 	AuthService authService;
 	MockMvc mvc;
-	LoginDto loginDto;
+	LoginVo loginVo;
 	
 	@BeforeEach
 	public void setup() {
@@ -50,20 +50,20 @@ class SocialWorkApplicationTests {
 	@Test
 	@Transactional
 	void testLogin() throws Exception {
-		EditUserDto editUserDto = new EditUserDto(); 
-		editUserDto.setUsername("testController");
-		editUserDto.setPassword("testCon123");
-		editUserDto.setEmail("test@xxx.xxx");
-		editUserDto.setNickname("XXXX");
-		authService.register(editUserDto, Arrays.asList(Role.USER));
-		loginDto = new LoginDto();
-		loginDto.setUsername("testController");
-		loginDto.setPassword("testCon123");
+		EditUserVo editUserVo = new EditUserVo(); 
+		editUserVo.setUsername("testController");
+		editUserVo.setPassword("testCon123");
+		editUserVo.setEmail("test@xxx.xxx");
+		editUserVo.setNickname("XXXX");
+		authService.register(editUserVo, Arrays.asList(Role.USER));
+		loginVo = new LoginVo();
+		loginVo.setUsername("testController");
+		loginVo.setPassword("testCon123");
 		String loginUrl = "/auth/login";
 		try{
 			MvcResult result = mvc.perform(MockMvcRequestBuilders.post(loginUrl)
 					.contentType(MediaType.APPLICATION_JSON)
-					.content(objectMapper.writeValueAsString(loginDto))
+					.content(objectMapper.writeValueAsString(loginVo))
 					.accept(MediaType.APPLICATION_JSON)).andReturn();
 			int status = result.getResponse().getStatus();
 			Assertions.assertEquals(200, status, "success");

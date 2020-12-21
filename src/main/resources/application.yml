@@ -1,8 +1,9 @@
 # port
 server:
   port: 8079
-# DataSource配置
+
 spring:
+# DataSource配置
   datasource:
     url: jdbc:mysql://localhost:3306/social_work?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=false
     username: root
@@ -14,9 +15,28 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: create
+  # Redis 配置
+  redis:
+    # Redis資料庫索引（預設為0）
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    # defalut為空
+    password:     
+    jedis:
+      pool:
+        # 連線池最大連線數（使用負值表示沒有限制）
+        max-active: 8
+        # 連線池最大等待時間（使用負值表示沒有限制）
+        max-wait: -1
+        # 連線池中的最大空閒連線
+        max-idle: 8
+        # 連線池中的最小空閒連線
+        min-idle: 0  
+    # 連線超時時間（毫秒）
+    timeout: 0
 # security token timeout(mins)
 token:
   timeout:
     jwt: 1
     refresh: 3
-    

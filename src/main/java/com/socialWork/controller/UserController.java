@@ -8,15 +8,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.socialWork.auth.dto.EditUserDto;
 import com.socialWork.auth.dto.UserInfoDto;
 import com.socialWork.auth.entity.User;
 import com.socialWork.auth.service.AuthService;
 import com.socialWork.auth.service.UserService;
+import com.socialWork.auth.vo.EditUserVo;
 import com.socialWork.exceptions.UserInfoException;
 
 import io.swagger.annotations.Api;
@@ -45,7 +44,7 @@ public class UserController extends BaseController {
 
 	@RequestMapping(value = "/saveEdit", method = RequestMethod.POST)
 	@ApiOperation(notes = "編輯使用者資訊", value = "")
-	public String saveEditBtn(@RequestBody @Validated EditUserDto editUserDto) throws JsonProcessingException {
+	public String saveEditBtn(@RequestBody @Validated EditUserVo editUserDto) throws JsonProcessingException {
 		if (Objects.isNull(editUserDto.getUserId())) throw new UserInfoException("invalid params");
 		User user = authService.updateUserInfo(editUserDto);
 		return objectMapper.writeValueAsString(UserInfoDto.of(user));

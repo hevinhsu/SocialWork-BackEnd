@@ -1,4 +1,4 @@
-package com.socialWork.auth.dto;
+package com.socialWork.auth.vo;
 
 import java.io.Serializable;
 
@@ -12,7 +12,7 @@ import lombok.ToString;
 @Data
 @ToString
 @ApiModel(description = "login validate Dto")
-public final class LoginDto implements Serializable {
+public final class LoginVo implements Serializable {
 	/**
 	 * 
 	 */
