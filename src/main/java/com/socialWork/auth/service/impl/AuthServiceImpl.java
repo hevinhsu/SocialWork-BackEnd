@@ -1,24 +1,5 @@
 package com.socialWork.auth.service.impl;
 
-import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.socialWork.Util.JWTTokenUtils;
 import com.socialWork.Util.RedisUtils;
 import com.socialWork.auth.dto.LoginSuccessDto;
@@ -32,28 +13,57 @@ import com.socialWork.auth.vo.LoginVo;
 import com.socialWork.auth.vo.RefreshVo;
 import com.socialWork.exceptions.LoginException;
 import com.socialWork.exceptions.UserInfoException;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class AuthServiceImpl implements AuthService {
-	@Autowired
+
+	public AuthServiceImpl(AuthenticationManager authenticationManager, JWTTokenUtils tokenProvider, UserRepository userRepo, PasswordEncoder passwordEncoder, RoleRepository roleRepo) {
+		this.authenticationManager = authenticationManager;
+		this.tokenProvider = tokenProvider;
+		this.userRepo = userRepo;
+		this.passwordEncoder = passwordEncoder;
+		this.roleRepo = roleRepo;
+	}
+
 	private AuthenticationManager authenticationManager;
-	@Autowired
 	private JWTTokenUtils tokenProvider;
-	@Autowired
 	private UserRepository userRepo;
-	@Autowired
 	private PasswordEncoder passwordEncoder;
-	@Autowired
 	private RoleRepository roleRepo;
 	private Timestamp now = new Timestamp(System.currentTimeMillis());
 	@Value("${token.timeout.refresh}")
-	private long EXPIRATIONTIME;  
-	
+	private int EXPIRATIONTIME;
+	@Value("${token.wrongPassword.maxCount}")
+	private int wrongPasswordCount;
+	@Value("${token.wrongPassword.waitingTime}")
+	private int wrongPasswordWaitingTime;
+	@Value("${token.wrongPassword.wrongRecordExistTime}")
+	private int wrongPasswordMaxInputTime;;
+	@Value("${token.wrongPassword.key}")
+	private String wrongPasswordKey;
+	@Value("${token.wrongPassword.blackList.key}")
+	private String blackListKey;
+
 	@Override
-	@Transactional(readOnly = true)
 	public void register(EditUserVo editUserVo, List<Long> roleIds) throws Exception {
 		Optional<User> userOpt = userRepo.findByUsername(editUserVo.getUsername());
 		if(userOpt.isPresent()) throw new UserInfoException("帳號重複");
@@ -67,6 +77,7 @@ public class AuthServiceImpl implements AuthService {
 								  .nickname(editUserVo.getNickname())
 								  .roles(roleList)
 								  .createTime(now)
+				                  .status(User.ENABLE)
 								  .build();
 		userRepo.save(user);
 		log.info(editUserVo.getNickname() + "create new account,username = "+editUserVo.getUsername());
@@ -93,30 +104,54 @@ public class AuthServiceImpl implements AuthService {
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 				loginVo.getUsername(), loginVo.getPassword());
 		if (Objects.isNull(authenticationToken)) return null;
-		
 		User user = userRepo.findByUsername(authenticationToken.getPrincipal().toString())
 				.orElseThrow(() -> new LoginException("使用者不存在"));
 		Authentication authentication = authenticationManager.authenticate(authenticationToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwtTokenString = tokenProvider.createToken(authentication);
+		log.info("user login, id: "+ user.getUsername() + ", login, ip addr:" + loginVo.getIp());
 		return LoginSuccessDto.of(jwtTokenString, user.getUserId(), user.getUsername(), user.getNickname());
 	}
 
 	@Override
 	public String createRefreshToken(String ip) {
 		String token = JWTTokenUtils.createRefreshToken();
-		int expiredTime = (int) (System.currentTimeMillis()+EXPIRATIONTIME*60*1000);
-		RedisUtils.hset(token, "ip", ip, expiredTime);
+		RedisUtils.hset(token, "ip", ip, EXPIRATIONTIME);
 		return token;
 	}
-	
+
+	@Override
+	public void wrongPasswordBlackListCheck(String username) {
+		String key = wrongPasswordKey + "-" +username;
+		Integer count;
+		// check in blackList
+		String blackListRedisKey = blackListKey+ "-" + username;
+		if(RedisUtils.hasKey(blackListRedisKey)){
+			throw  new LoginException("此帳號因密碼錯誤過多，請於"+wrongPasswordWaitingTime+"分鐘後再試");
+		}else{
+			count = RedisUtils.hasKey(key)?Integer.valueOf((String)RedisUtils.get(key)) : 0;
+		}
+		if(count==0){
+			count = 1;
+			RedisUtils.set(key, String.valueOf(count), wrongPasswordMaxInputTime * 60);
+		}else{
+			if(count>=wrongPasswordCount){
+				RedisUtils.delete(key);
+				String newBlackListKey = blackListKey + "-" + username;
+				RedisUtils.set(newBlackListKey, username, wrongPasswordWaitingTime * 60);
+				throw  new LoginException("此帳號因密碼錯誤過多，請於"+wrongPasswordWaitingTime+"分鐘後再試");
+			}else{
+				RedisUtils.set(key, String.valueOf(++count), wrongPasswordMaxInputTime * 60);
+			}
+		}
+	}
+
 	@Override
 	@Transactional(readOnly = true)
 	public LoginSuccessDto refresh(RefreshVo refreshVo) {
 		String token = refreshVo.getRefreshToken();
 		if(!RedisUtils.hasKey(token)) throw new LoginException("refresh token 不存在");
 		if(!RedisUtils.hget(token, "ip").toString().equals(refreshVo.getIp())) throw new LoginException("ip 不正確");
-		System.out.println("for test: "+RedisUtils.hasKey(refreshVo.getRefreshToken()));
 		User user = userRepo.findById(refreshVo.getUserId())
 							.orElseThrow( ()->new LoginException("使用者不存在"));
 		Collection<? extends GrantedAuthority> authorities = 
@@ -131,5 +166,6 @@ public class AuthServiceImpl implements AuthService {
 		String jwtTokenString = tokenProvider.createToken(authenticationToken);
 		return LoginSuccessDto.of(jwtTokenString, user.getUserId(), user.getUsername(), user.getNickname());
 	}
-	
+
+
 }

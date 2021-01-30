@@ -29,10 +29,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1463768367790619826L;
+    public static final Integer DISABLE = 0;
+    public static final Integer ENABLE = 1;
+    public static final Integer DELETED = 3;
+
+    private static final long serialVersionUID = -1463768367790619826L;
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long userId;
@@ -44,11 +45,12 @@ public class User implements Serializable {
     String email;
     @Column(name = "nickname", nullable = false)
     String nickname;
-
     @Column(name = "createTime", nullable = false)
     Timestamp createTime;
     @Column(name = "updateTime")
     Timestamp updateTime;
+    @Column(name = "status", nullable = false)
+    private Integer status;
 
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "userId")}, inverseJoinColumns = {@JoinColumn(name = "rid", referencedColumnName = "roleId")})

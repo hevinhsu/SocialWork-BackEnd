@@ -24,6 +24,5 @@ public class UserServiceTest {
 		Long userId = 1L;
 		UserInfoDto dto = userService.findUserInfo(username, userId);
 	    Assertions.assertEquals("nickTest", dto.getNickname(), "test nickname");
-
 	}
 }

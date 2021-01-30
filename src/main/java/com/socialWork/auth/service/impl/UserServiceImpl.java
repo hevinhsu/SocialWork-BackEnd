@@ -12,7 +12,11 @@ import com.socialWork.exceptions.UserInfoException;
 
 @Service
 public class UserServiceImpl implements UserService {
-	@Autowired
+
+	public UserServiceImpl(UserRepository userRepo) {
+		this.userRepo = userRepo;
+	}
+
 	private UserRepository userRepo;
 	
 	@Override

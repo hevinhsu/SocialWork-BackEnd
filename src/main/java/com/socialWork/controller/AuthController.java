@@ -36,19 +36,22 @@ import lombok.extern.slf4j.Slf4j;
 @Api(tags = "登入註冊相關Controller")
 @Slf4j
 public class AuthController extends BaseController {
-	@Autowired
+	public AuthController(AuthService authService) {
+		this.authService = authService;
+	}
 	private AuthService authService;
 
 	@ApiResponses(value = { @ApiResponse(code = 500, message = "Account not found") })
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ApiOperation(notes = "登入", value = "")
-	public String login(@RequestBody @Validated LoginVo loginVo, HttpServletResponse httpResponse) throws Exception {
-		log.info("user login: " + loginVo.getUsername());
+	public String login(@RequestBody @Validated LoginVo loginVo, HttpServletRequest request, HttpServletResponse httpResponse) throws Exception {
 		try {
+			loginVo.setIp(AccessAddressUtils.getIpAddress(request));
 			LoginSuccessDto loginSuccessDto = authService.login(loginVo);
 			httpResponse.addHeader(WebSecurityConfig.AUTHORIZATION_HEADER, loginSuccessDto.jwtToken);
 			return objectMapper.writeValueAsString(loginSuccessDto);
 		} catch (BadCredentialsException authentication) {
+			authService.wrongPasswordBlackListCheck(loginVo.getUsername());
 			throw new LoginException("密碼錯誤");
 		}
 	}

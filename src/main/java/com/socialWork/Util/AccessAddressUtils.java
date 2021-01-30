@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
-@Slf4j
 public class AccessAddressUtils {
 	/**
 	 * get user Ip
@@ -32,7 +31,6 @@ public class AccessAddressUtils {
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getRemoteAddr();
 		}
-		log.info("user IP: "+ ip);
 		return ip;
 	}
 }

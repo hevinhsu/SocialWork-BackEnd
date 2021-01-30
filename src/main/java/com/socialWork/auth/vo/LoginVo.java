@@ -23,4 +23,6 @@ public final class LoginVo implements Serializable {
 	@ApiModelProperty(value = "密碼", position = 2)
 	@NotBlank(message = "密碼不能為空")
 	private String password;
+	@ApiModelProperty(value = "使用者登入IP", position = 3)
+	private String ip;
 }

@@ -1,8 +1,17 @@
 # port
 server:
+#  address: 172.20.10.13
   port: 8079
+  uri-encoding: UTF-8
 
 spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: UTF-8
+      force: UTF-8
+  message:
+    encoding: UTF-8
 # DataSource配置
   datasource:
     url: jdbc:mysql://localhost:3306/social_work?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=false
@@ -40,3 +49,16 @@ token:
   timeout:
     jwt: 1
     refresh: 3
+    # 密碼輸入錯誤
+  wrongPassword:
+    # login blackList key
+    blackList:
+      key: loginBlackList
+    # redis key
+    key: wrongPasswordId
+    # 允許最大次數
+    maxCount: 3
+    # 錯誤紀錄存活時間(分)
+    wrongRecordExistTime: 1
+    # 等待時間(分)
+    waitingTime: 1

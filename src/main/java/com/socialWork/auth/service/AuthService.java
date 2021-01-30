@@ -20,4 +20,5 @@ public interface AuthService {
 	
 	public String createRefreshToken(String ip);
 
+	public void wrongPasswordBlackListCheck(String username);
 }

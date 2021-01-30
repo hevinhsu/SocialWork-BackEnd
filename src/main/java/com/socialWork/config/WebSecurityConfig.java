@@ -50,6 +50,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	String[] USER_CONTROLLER_WITHLIST = {
 			"/user/info/**",
 	};
+	String[] FORUM_CONTROLLER_WITHLIST = {
+			"/forum/get/**"
+	};
+
 	@Autowired
 	private UserDetailsService userDetailsService;
 
@@ -67,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SWAGGER_WHITELIST).permitAll()
 				.antMatchers(AUTH_CONTROLLER_WITHLIST).permitAll()
 				.antMatchers(USER_CONTROLLER_WITHLIST).permitAll()
+				.antMatchers(FORUM_CONTROLLER_WITHLIST).permitAll()
 				.antMatchers("/auth/test").hasRole("ADMIN")
 				.antMatchers("/test").hasAnyRole("USER")
 				.anyRequest().authenticated();
