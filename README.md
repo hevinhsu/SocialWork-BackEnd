@@ -24,7 +24,7 @@
 ### 其他:
 - [X] swagger
 - [X] gradle
-- [ ] redis
+- [X] redis
 ### DB:
 * MySQL or PostgreSQL(目前使用Mysql)
 
@@ -34,6 +34,13 @@
 2. [gradle](https://www.1ju.org/gradle/how-install-gradle-windows)(如果在Eclipse，需安裝[外掛](https://rx1226.pixnet.net/blog/post/321583836))
 3. [Lombok](https://polinwei.com/lombok-install-in-eclipse/)
 4. MySQL(建立 ```social_work``` 資料庫)
+
+如果有裝 Docker，可使用專案資料夾 resource下的 docker-compose來起DB跟redis，
+   啟動方式如下：
+```
+//用terrminal 到docker-compose位置
+docker-compose up -d
+```
 
 並在application.yml中，更改裡頭的環境變數
 
@@ -51,3 +58,4 @@
 * 11/09-11/12 [前端:會員資料預覽、編輯、Confirm Component；後端:查詢會員資料、更新會員資料相關API、ExceptionHandler新增會員資料改動產生的Exception](https://hackmd.io/1SIfOeRNSoanEDjwEyRTJg)
 * 11/13-11/28 [refresh jwt token part1](https://hackmd.io/fh1njno7QQ6Y8IKfJBoviQ)
 * [refresh jwt token part2](https://hackmd.io/g7-IcniJRXyE6lNkUqE07g)
+* Redis [簡介](https://hackmd.io/ocq7AnMnQTeYID1q2FztOA)
