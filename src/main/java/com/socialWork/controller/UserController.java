@@ -1,15 +1,5 @@
 package com.socialWork.controller;
 
-import java.util.Objects;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.socialWork.auth.dto.UserInfoDto;
 import com.socialWork.auth.entity.User;
@@ -17,20 +7,26 @@ import com.socialWork.auth.service.AuthService;
 import com.socialWork.auth.service.UserService;
 import com.socialWork.auth.vo.EditUserVo;
 import com.socialWork.exceptions.UserInfoException;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/user")
 @Api(tags = "會員資料相關Controller")
 @Slf4j
 public class UserController extends BaseController {
-	@Autowired
 	private AuthService authService;
-	@Autowired
 	private UserService userService;
+
+	public UserController(AuthService authService, UserService userService) {
+		this.authService = authService;
+		this.userService = userService;
+	}
 
 	@RequestMapping(value = "/info/{username}/{userId}", method = RequestMethod.GET)
 	@ApiOperation(notes = "不限身分，查詢使用者資訊", value = "")
