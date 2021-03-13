@@ -29,14 +29,8 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.12'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12' 
 	
-    testImplementation ('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'junit', module: 'junit' // 排除JUnit 4的依賴
-    }
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     
-    // JUnit 5 依賴設定
-    testImplementation 'org.junit.jupiter:junit-jupiter-api' // JUnit 5 API 介面
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine' // JUnit 5 測試框架的實作
-
 	// this is for mysql java connector
 	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
 	runtime "mysql:mysql-connector-java:8.0.15"	
@@ -59,18 +53,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/redis.clients/jedis
 	compile group: 'redis.clients', name: 'jedis', version: '3.3.0'
 
-	testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.2.RELEASE') {
-		exclude group: 'junit'
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-	testImplementation 'org.junit.platform:junit-platform-commons:1.5.2'
-	testImplementation('org.junit.jupiter:junit-jupiter-api:5.5.2')
-	testImplementation('org.junit.jupiter:junit-jupiter-engine:5.5.2')
-	testImplementation('org.junit.jupiter:junit-jupiter-params:5.5.2')
 
 }
-
-
 
 test {
 	useJUnitPlatform()
